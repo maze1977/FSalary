@@ -6,7 +6,7 @@
     (slet (formulaFileNames (directory "formulas/*.txt"))
         (loop for formulaFileName in formulaFileNames
             do 
-                (read-list-from-file formulaFileName x                
+                (read-list-from-file (formulaFileName x)
                     (print x)
                 )            
         )
