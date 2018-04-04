@@ -1,0 +1,1 @@
+(deformula alv (alter)  (alter < 30 250 > 30 200))

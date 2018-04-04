@@ -28,7 +28,9 @@
 (defmacro create-ifm (lst)
 	(create-if lst)
 )
-
+(defmacro test_ (lst)
+	`(print ,lst)
+)
 ;; invoke like: (deformula test (anzkinder alter)  (anzkinder < 4 (alter < 30 250 > 30 200) >= 4 (alter < 30 350 > 30 300)))
 (defmacro deformula (func-name pars expr)
 	`(defun ,func-name ,pars 

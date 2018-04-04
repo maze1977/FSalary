@@ -1,0 +1,1 @@
+(deformula kizula (anzkinder alter)  (anzkinder < 4 (alter < 30 250 > 30 200) >= 4 (alter < 30 350 > 30 300)))
