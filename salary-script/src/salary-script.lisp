@@ -1,5 +1,6 @@
 
 (load "utils")
+(load "structures")
 
 (defun create-if (lst)
 	(if (> (list-length lst) 1)
@@ -24,7 +25,14 @@
 )
 
 (defmacro deformula (func-name pars expr)
-	`(defun ,func-name ,pars 
-			(create-ifm ,expr)
-	 )
+	
+
+	(let ( (combined (concatenate 'string (string func-name) "wrapper")))
+        (let ( ( cb (intern combined) ))
+        	`(progn
+				(defun ,cb  (a b) (+ a b)  )
+				(defun ,func-name ,pars  (create-ifm ,expr) )
+            )
+    	)	
+	)
 )

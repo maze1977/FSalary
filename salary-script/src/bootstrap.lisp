@@ -1,17 +1,12 @@
 (load "utils")
 (load "salary-script")
 
-
-
-(defun startup () 
+(defun startup ()
     (slet (formulaFileNames (directory "formulas/*.lisp"))
         (progn
             (loop for formulaFileName in formulaFileNames
-                do (load formulaFileName)
-                    
+                do (load formulaFileName)                    
             )
         )
     )
 )
-
-

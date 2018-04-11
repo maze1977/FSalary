@@ -1,9 +1,9 @@
-(deformula kizula (anzkinder alter) (
-    anzkinder
-         < 4    (alter 
+(deformula kizula ( p.nr-of-children p.age) (
+    p.nr-of-children
+         < 4    (p.age 
                         < 15 250
                         >= 15 200)
-         >= 4   (alter 
+         >= 4   (p.age 
                         < 15 350
                         >= 15 300))
 )
