@@ -24,21 +24,33 @@
 	(create-if lst)
 )
 
+(defun str-concat (a b ) (string-upcase (concatenate 'string a b)))
+(defun append-to-symbol (sy appendix) (str-concat (string sy) appendix))
+(defun create-new-symbol (sy appendix) (
+	slet (combined (append-to-symbol sy appendix))
+	(slet  ( cb (intern combined) )
+		`(,@cb)
+	)))
+
+
+(defun prefix-of (s)  (subseq (string s) 0 1))
+(defun attr-name-of (s)  (subseq (string s) 2))
+
 ;; p.age -> (person-age p)
 (defun map-parameter (formula-parameter) 
-	(slet (firstchar (subseq (string formula-parameter) 0 1))
+	(slet (firstchar (prefix-of formula-parameter))
 		(if (string-equal firstchar "P" )
-			(slet (varname (subseq (string formula-parameter) 2))				
-				(slet (f-name (find-symbol (string-upcase (concatenate 'string "person-" varname))))
+			(slet (varname (attr-name-of formula-parameter) )
+				(slet (f-name (find-symbol (str-concat "person-" varname)))
 					`(,f-name p)				
 				)))))
 
 (defmacro deformula (func-name pars expr)
-	(let ( (combined (string-upcase (concatenate 'string (string func-name) "wrapper"))))
-        (let ( ( cb (intern combined) ))
-			(slet (parpars (mapcar #'map-parameter pars) ) 
+	(slet (combined (append-to-symbol func-name "wrapper"))
+        (slet  ( cb (intern combined) )
+			(slet (wrapper-pars (mapcar #'map-parameter pars) ) 
         	`(progn				
-				(defun ,func-name ,pars  (create-ifm ,expr) )				
-				(defun ,cb  (p) (,func-name ,@parpars)  )
+				(defun ,func-name ,pars  (create-ifm ,expr) )
+				(defun ,cb  (p) (,func-name ,@wrapper-pars)  )
 				)
             ))))
