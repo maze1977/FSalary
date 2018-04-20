@@ -24,15 +24,30 @@
 	(create-if lst)
 )
 
-(defmacro deformula (func-name pars expr)
-	
 
-	(let ( (combined (concatenate 'string (string func-name) "wrapper")))
+;; p.age -> (person-age p)
+
+(defun symbol-append (&rest symbols) 
+  (intern (apply #'concatenate 'string 
+                 (mapcar #'symbol-name symbols))))
+
+
+;; p.age -> (person-age p)
+(defun map-parameter (formula-parameter) 
+	(slet (firstchar (subseq (string formula-parameter) 0 1))
+		(if (string-equal firstchar "P" )
+			(slet (varname (subseq (string formula-parameter) 2))				
+				(slet (f-name (find-symbol (string-upcase (concatenate 'string "person-" varname))))
+					`(,f-name p)				
+				)))))
+
+
+(defmacro deformula (func-name pars expr)
+	(let ( (combined (string-upcase (concatenate 'string (string func-name) "wrapper"))))
         (let ( ( cb (intern combined) ))
-        	`(progn
-				(defun ,cb  (a b) (+ a b)  )
-				(defun ,func-name ,pars  (create-ifm ,expr) )
-            )
-    	)	
-	)
-)
+			(slet (parpars (mapcar #'map-parameter pars) ) 
+        	`(progn				
+				(defun ,func-name ,pars  (create-ifm ,expr) )				
+				(defun ,cb  (p) (,func-name ,@parpars)  )
+				)
+            ))))
