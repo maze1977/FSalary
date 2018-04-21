@@ -2,8 +2,14 @@
 (load "utils")
 (load "structures")
 
+(defun is-if (lst)
+	(let ( (possible-conditions '(= < > <= >= )) (2nd-sy (nth 1 lst)) )
+	(member 2nd-sy possible-conditions)))
+
+
+
 (defun create-if (lst)
-	(if (> (list-length lst) 1)
+	(if (is-if lst)
 		(let ((attr (nth 0 lst))
 			 (condition (nth 1 lst))			
 			 (val-to-check (nth 2 lst))
@@ -14,9 +20,8 @@
 				`(if (,condition ,attr ,val-to-check) ,result-val ,(create-if (cons attr else-val) ) )
 				(let ((x (create-if result-val )))
 					`(if (,condition ,attr ,val-to-check) ,x ,(create-if (cons attr else-val) ) )					
-				)
-			)
-		)
+				)))
+			`(,@lst)
 	)
 )
 

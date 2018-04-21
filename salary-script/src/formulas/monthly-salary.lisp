@@ -1,0 +1,1 @@
+(deformula monthly (p.salary p.quota)  (* p.salary p.quota))
