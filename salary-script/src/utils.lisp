@@ -11,4 +11,8 @@
 	)
 )
 
+(defun consume-list (lst &rest fields)
+
+
+)
 
