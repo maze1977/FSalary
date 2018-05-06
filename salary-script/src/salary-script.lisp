@@ -9,16 +9,20 @@
 	
 
 (defun is-let (lst)
-	(slet (1st (nth 0 lst))
-		(string= (string 1st) "LET")
+	(slet (2nd-sy (nth 1 lst))
+		(eq '<- 2nd-sy)
 	)
 )
+
+(defun is-binary (lst)
+		(let ( (possible-operators '(* / + -)) (2nd-sy (nth 1 lst)) )
+			(member 2nd-sy possible-operators)))
 
 (defun handle-salary-script (lst)
 	(if (not (atom lst))
 		(if (is-if lst)
 			(let ((attr (nth 0 lst))
-				(condition (nth 1 lst))			
+				(condition (nth 1 lst))
 				(val-to-check (nth 2 lst))
 				(result-val (nth 3 lst))
 				(else-val (cddddr lst))			 
@@ -31,19 +35,28 @@
 			)
 			(if (is-let lst)
 				(let (
-						(var (nth 1 lst))
-						(value (nth 3 lst))
-						(expr (nth 4 lst))
+						(var (nth 0 lst))
+						(value (nth 2 lst))
+						(expr (nth 3 lst))
 					)
-					(if (atom value)
-					`(slet (,var ,value)  (handle-salary-script ,expr)  )
-						(slet (x (handle-salary-script value ))
-						`(slet (,var ,x)  (handle-salary-script ,expr)  )
+					(let (
+							(x (handle-salary-script value ) )
+							(y (handle-salary-script expr ) )
 						)
-					)
-		)
-		lst
-		)
+						`(slet (,var ,x)  (handle-salary-script ,y)  )
+					)					
+				)
+				(if (is-binary lst)				
+					(let (
+							(left (handle-salary-script (nth 0 lst)))
+							(op (nth 1 lst) )
+							(right (handle-salary-script (nth 2 lst)))
+						)										
+						`(,op ,left ,right)						
+					)				
+					lst
+				)
+			)
 		)
 		lst
 	)

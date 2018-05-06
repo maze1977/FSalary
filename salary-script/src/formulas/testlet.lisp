@@ -1,1 +1,1 @@
-(deformula testlet (p.salary)  (let x = (* 3 p.salary) (* 2 x) ))
+(deformula testlet (p.salary)  (x <- (3 * p.salary) (x + 2) ))
